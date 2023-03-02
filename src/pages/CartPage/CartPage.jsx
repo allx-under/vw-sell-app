@@ -1,16 +1,17 @@
-import { useSelector } from "react-redux";
-import styled from "styled-components";
-import CartList from "../../components/CartList/CartList";
-import PageTitle from "../../components/PageTitle/PageTitle";
+import { useSelector } from 'react-redux';
+import styled from 'styled-components';
+import CartList from '../../components/CartList/CartList';
+
+import PageTitle from '../../components/PageTitle/PageTitle';
 
 const CartPage = () => {
-  const currentUserId = useSelector((state) => state.auth.uid);
-  const cars = useSelector((state) => state.cars).filter(
-    (car) => car.userId === currentUserId
+  const currentUserId = useSelector(state => state.auth.uid);
+  const cars = useSelector(state => state.cars).filter(
+    car => car.userId === currentUserId
   );
 
-  const getTotal = (cars) => {
-    const arrayOfSum = cars.map((car) => car.price);
+  const getTotal = cars => {
+    const arrayOfSum = cars.map(car => car.price);
     return arrayOfSum.reduce((a, b) => {
       return a + b;
     }, 0);
@@ -22,7 +23,9 @@ const CartPage = () => {
         {cars.length ? (
           <CartList cars={cars}></CartList>
         ) : (
-          <StyledEmpty>Your cart is empty.</StyledEmpty>
+          <>
+            <StyledEmpty>Your cart is empty.</StyledEmpty>
+          </>
         )}
         <StyledTotal>Total spent: {getTotal(cars)}$</StyledTotal>
       </Wrapper>

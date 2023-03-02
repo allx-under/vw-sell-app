@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 const SortInput = ({ selectValue, setSelectValue }) => {
   return (
     <StyledInput>
@@ -6,7 +6,7 @@ const SortInput = ({ selectValue, setSelectValue }) => {
 
       <StyledSelect
         value={selectValue}
-        onChange={(e) => setSelectValue(e.target.value)}
+        onChange={e => setSelectValue(e.target.value)}
         name="car"
         id="select"
       >
@@ -33,8 +33,8 @@ const StyledLabel = styled.label`
 `;
 
 const StyledSelect = styled.select`
-  background-color: transparent;
-  color: white;
+  background-color: #fff;
+  color: rgb(20, 20, 20);
   border: 1px solid white;
   width: 130px;
   height: 20px;

@@ -1,21 +1,24 @@
-import { nanoid } from "@reduxjs/toolkit";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
-import styled from "styled-components";
-import { Notify } from "notiflix/build/notiflix-notify-aio";
+import { nanoid } from '@reduxjs/toolkit';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
+import styled from 'styled-components';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
-import PageTitle from "../../components/PageTitle/PageTitle";
+import PageTitle from '../../components/PageTitle/PageTitle';
 
-import { ReactComponent as Logo } from "../../images/logo.svg";
-import { addToCart } from "../../redux/actions";
-import { fetchOneCar } from "../../service/api/API";
+import { ReactComponent as Logo } from '../../images/logo.svg';
+import { addToCart } from '../../redux/actions';
+import { fetchOneCar } from '../../service/api/API';
+import Loader from '../../components/Loader/Loader';
 
 const CarDetailsPage = () => {
   const [carInfo, setCarInfo] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const auth = useSelector(state => state.auth);
+
   const { id } = useParams();
   const dispatch = useDispatch();
-  const auth = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
   const onClickAddToCart = () => {
@@ -27,18 +30,18 @@ const CarDetailsPage = () => {
     if (auth.isAuth) {
       dispatch(addToCart(carWithUniqueId));
       return Notify.success(`${carInfo.car} succesfully added to your cart!`, {
-        position: "center-top",
+        position: 'center-top',
       });
     } else {
       Notify.failure(
-        "Sorry, only authorized person can buy a car! In 5 seconds you will be redirect to login page.",
+        'Sorry, only authorized person can buy a car! In 5 seconds you will be redirect to login page.',
         {
           timeout: 5000,
-          position: "center-top",
+          position: 'center-top',
         }
       );
       setTimeout(() => {
-        navigate("/signin");
+        navigate('/signin');
       }, 5000);
     }
   };
@@ -46,10 +49,13 @@ const CarDetailsPage = () => {
   useEffect(() => {
     const getCar = async () => {
       try {
+        setIsLoading(true);
         const data = await fetchOneCar(id);
         setCarInfo(data);
       } catch (error) {
         console.log(error);
+      } finally {
+        setIsLoading(false);
       }
     };
     getCar();
@@ -59,20 +65,32 @@ const CarDetailsPage = () => {
     <>
       <PageTitle content="More details you can find here" />
       <Wrapper>
-        {" "}
-        <StyledImgWrapper>
-          <StyledImg src={carInfo.mainphoto} alt={carInfo.car} />
-        </StyledImgWrapper>
-        <ContentWrapper>
-          <h3>{carInfo.car}</h3>
-          <StyledText>Price: {carInfo.price}$</StyledText>
-          <StyledText>Power: {carInfo.horsepower}hp</StyledText>
-          <StyledText>Fuel consumption: {carInfo.average}l/100km</StyledText>
-          <StyledBtn onClick={onClickAddToCart}>
-            Add to cart
-            <StyledLogo width="25px" height="25px" />
-          </StyledBtn>
-        </ContentWrapper>
+        {' '}
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <>
+            <StyledImgWrapper>
+              <StyledImg
+                loading="lazy"
+                src={carInfo.mainphoto}
+                alt={carInfo.car}
+              />
+            </StyledImgWrapper>
+            <ContentWrapper>
+              <h3>{carInfo.car}</h3>
+              <StyledText>Price: {carInfo.price}$</StyledText>
+              <StyledText>Power: {carInfo.horsepower}hp</StyledText>
+              <StyledText>
+                Fuel consumption: {carInfo.average}l/100km
+              </StyledText>
+              <StyledBtn onClick={onClickAddToCart}>
+                Add to cart
+                <StyledLogo width="25px" height="25px" />
+              </StyledBtn>
+            </ContentWrapper>
+          </>
+        )}
       </Wrapper>
     </>
   );
