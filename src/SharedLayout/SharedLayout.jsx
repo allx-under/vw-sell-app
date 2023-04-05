@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
 import { lazy, Suspense } from 'react';
 import SingInPage from '../pages/SignInPage/SignInPage';
@@ -28,7 +28,7 @@ const SharedLayout = () => {
           <Route path="/signin" element={<SingInPage />} />
         </Route>
 
-        <Route path="*" element={<MainPage />} />
+        <Route path="*" element={<Navigate to="/" replace={true} />} />
       </Routes>
     </Suspense>
   );

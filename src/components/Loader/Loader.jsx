@@ -12,12 +12,16 @@ const Loader = () => {
 export default Loader;
 
 const rotate = keyframes`
-  from {
-    transform: rotateX(0deg);
+  0% {
+    transform: scale(0.8);
   }
 
-  to {
-    transform: rotateX(360deg);
+  50% {
+    transform: scale(1.1)
+  }
+
+  100% {
+    transform: scale(0.8);
   }
 `;
 
@@ -29,12 +33,11 @@ const StyledLoader = styled(Logo)`
 const LoaderWrapper = styled.div`
   width: 80px;
   height: 80px;
-  animation: ${rotate} 2s linear infinite;
+  animation: ${rotate} 1s linear infinite;
   align-self: center;
-  background-color: rgba(171, 171, 171, 0.5018601190476191);
   border-radius: 50%;
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 40px;
+  left: 48%;
   transform: translate(-50%, -50%);
 `;
